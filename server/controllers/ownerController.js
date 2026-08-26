@@ -1,6 +1,6 @@
-import imagekit from "../configs/imageKit.js";
+import imagekit from "../configs/imageKit.js"; //help us to store image and give its url
 import User from "../models/User.js";
-import fs from "fs";
+import fs from "fs"; // it help client to acces its local file system
 import Car from "../models/Car.js";
 import Booking from "../models/booking.js";
 
@@ -8,7 +8,7 @@ import Booking from "../models/booking.js";
 export const changeRoleToOwner = async (req, res) => {
     try {
         const { _id } = req.user;
-        await User.findByIdAndUpdate(_id, { role: "owner" });
+        await User.findByIdAndUpdate(_id, { role: "owner" }); // updates the role
         res.json({ success: true, message: "Now you can list Cars" });
     } catch (error) {
         console.log(error.message);
@@ -19,20 +19,20 @@ export const changeRoleToOwner = async (req, res) => {
 //API to list Car
 export const addCar = async (req, res) => {
     try {
-        const {_id} = req.user;
-        let car = JSON.parse(req.body.carData);
-        const imageFile = req.file;
+        const {_id} = req.user; // gets user id
+        let car = JSON.parse(req.body.carData); // stores the data in the form of json
+        const imageFile = req.file; 
 
         //Upload image to image Kit
-        const fileBuffer = fs.readFileSync(imageFile.path);
-        const response = await imagekit.upload({
+        const fileBuffer = fs.readFileSync(imageFile.path); 
+        const response = await imagekit.upload({ 
             file: fileBuffer,
             fileName: imageFile.originalname,
             folder: '/cars'
         });
 
         // For URL Generation, works for both images and videos
-        var optimizedImageUrl = imagekit.url({
+        var optimizedImageUrl = imagekit.url({ // Generates the image url
             path: response.filePath,
             transformation: [
                 {width: '1280'}, //Width resizing
